@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setsearch] = useState('')
   const [createdMessage, setCreatedMessage] = useState('');
+  const [errMessage, setErrMessage] = useState('');
 
   useEffect(() => {
     ApiCalls
@@ -48,6 +49,7 @@ const App = () => {
           }).catch(err =>
           {
             console.log('err occur: ', err)
+            setErrMessage(`Information of ${newName} has already been removed from server`);
           })
       }
       return
@@ -87,7 +89,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification newName={newName} createdMessage={createdMessage} />
+      <Notification newName={newName} createdMessage={createdMessage} errMessage={errMessage} />
       <Filter search={search} handleSearchChange={handleSearchChange} />
       <h3>Add a new</h3>
       <PersonForm addPerson={addPerson} newName={newName} handlePersonChange={handlePersonChange} handleNumberChange={handleNumberChange} newNumber={newNumber} />

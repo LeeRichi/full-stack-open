@@ -1,31 +1,36 @@
 import { useState, useEffect } from 'react';
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
-const Notification = ({createdMessage }) =>
+const Notification = ({createdMessage, errMessage }) =>
 {
-    console.log(createdMessage)
     const [isVisible, setIsVisible] = useState(false);
+    const [isErrMessage, setIsErrMessage] = useState(false);
 
     useEffect(() => {
-        if (createdMessage) {
+        if (createdMessage || errMessage) {
             setIsVisible(true);
+            if (errMessage)
+            {
+                setIsErrMessage(true)
+            }
 
             const timer = setTimeout(() => {
                 setIsVisible(false);
-            }, 3000);
+                setIsErrMessage(false)
+            }, 5000);
 
             return () => clearTimeout(timer);
         }
-    }, [createdMessage]);
+    }, [createdMessage, errMessage]);
 
     const notificationStyle = {
-        color: 'green',
+        color: isErrMessage ? 'red' : 'green',
         display: isVisible ? 'block' : 'none',
         fontSize: '32px'
     }
   return (
       <div style={notificationStyle}>
-        {createdMessage}
+        {createdMessage || errMessage}
       </div>
   )
 }
