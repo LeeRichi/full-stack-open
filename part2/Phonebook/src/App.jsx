@@ -11,7 +11,7 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [search, setsearch] = useState('')
+  const [search, setSearch] = useState('')
   const [createdMessage, setCreatedMessage] = useState('');
   const [errMessage, setErrMessage] = useState('');
 
@@ -70,7 +70,7 @@ const App = () => {
 
   const handleSearchChange = (e) =>
   {
-    setsearch(e.target.value)
+    setSearch(e.target.value)
   }
 
   const handlePersonChange = (event) => {
