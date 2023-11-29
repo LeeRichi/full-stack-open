@@ -1,12 +1,11 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const mongoose = require('mongoose')
-require('dotenv').config();
+require('dotenv').config()
 const Note = require('./models/note')
 
 app.use(cors())
-app.use(express.json());
+app.use(express.json())
 
 app.use(express.static('dist'))
 
@@ -38,13 +37,13 @@ app.get('/api/notes', (request, response) => {
   })
 })
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)
     .then(note => {
       if (note) {
         response.json(note)
       } else {
-        response.status(404).end() 
+        response.status(404).end()
       }
     })
     .catch(error => next(error))
@@ -78,6 +77,7 @@ app.delete('/api/notes/:id', (request, response, next) =>
   Note.findByIdAndDelete(request.params.id)
     .then(result => {
       response.status(204).end()
+      console.log(result)
     })
     .catch(error => next(error))
 })
@@ -87,10 +87,10 @@ app.put('/api/notes/:id', (request, response, next) => {
   const { content, important } = request.body
 
   Note.findByIdAndUpdate(
-    request.params.id, 
+    request.params.id,
     { content, important },
     { new: true, runValidators: true, context: 'query' }
-  ) 
+  )
     .then(updatedNote => {
       response.json(updatedNote)
     })
