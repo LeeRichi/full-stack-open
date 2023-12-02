@@ -4,7 +4,22 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
+
+beforeEach(async () => {  
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash("123", 10)
+    const user = new User({
+       username: "cow",
+       name: "cow",
+       blogs: [],
+       passwordHash
+    })
+  
+    await user.save()
+}, 100000)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -21,18 +36,6 @@ test('blogs are returned as json', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
-
-// test('id uniqueness', async () =>
-// {
-//   // const blogsAtStart = await helper.blogsInDb()
-//   // const blogToCheck = blogsAtStart[0]
-
-//   // expect(blogToCheck).toBeDefined();
-//   await api
-//     .post('/api/blogs')
-//     .expect(201)
-//     .expect()
-// })
 
 test('id property is named id after creating a blog post', async () => {
   const newBlog = {
@@ -61,37 +64,28 @@ test('id property is named id after creating a blog post', async () => {
   )
 });
 
-// test('if the likes property is missing from the request, it will default to the value 0.', async() =>
-// {
-//   const newBlogWithOutLikes = {
-//     title: 'Test Blog',
-//     author: 'This is a test blog post.',       
-//     url: 'www.google.com',
-//     // likes: 10
-//   };
-
-//   if (newBlogWithOutLikes.likes === undefined)
-//   {
-//     const response = await api
-//       .post('/api/blogs')
-//       .send(...newBlogWithOutLikes, likes: 0)
-//       .expect(201)
-//       .expect('Content-Type', /application\/json/);
-//   }
-// })
-
 test('if the likes property is missing, it defaults to 0', async () => {
-  const newBlogWithoutLikes = {
+  const newBlogWithoutLikes =
+  {
     title: 'Test Blog',
     author: 'This is a test blog post.',
-    url: 'www.google.com',
-    // likes property is intentionally omitted
+    url: 'www.google.com'
   };
+
+  const user = {
+    username: "cow",
+    password: "123"
+  }
+
+  const loginUser = await api
+    .post('/api/login')
+    .send(user)
 
   const response = await api
     .post('/api/blogs')
     .send(newBlogWithoutLikes)
     .expect(201)
+    .set('Authorization', `Bearer ${loginUser.body.token}`)
     .expect('Content-Type', /application\/json/);
 
   expect(response.body.likes).toBeDefined();
@@ -158,8 +152,6 @@ describe('updating of a blog', () => {
     expect(updatedBlog.likes).toBe(blogToUpdate.likes);
   });
 });
-
-
 
 afterAll(async () => {
   await mongoose.connection.close()

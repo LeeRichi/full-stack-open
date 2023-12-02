@@ -69,7 +69,6 @@ const specificBlogInDb = async (id) => {
   return blog.toJSON();
 };
 
-
 module.exports = {
   initialBlogs, nonExistingId, blogsInDb, specificBlogInDb
 }
