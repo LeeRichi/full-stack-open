@@ -1,13 +1,12 @@
-POST http://localhost:3003/api/blogs
-Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvdyIsImlkIjoiNjU2YjE4MTA2MWViZTE2NjM4OTc5MGQzIiwiaWF0IjoxNzAxNTI1NDg4fQ.FXzR69ut_IfUJeM_iWcQf1rfvj19brga169o7lDc-q8
+# POST http://localhost:3003/api/blogs
+# Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvdyIsImlkIjoiNjU2YjE4MTA2MWViZTE2NjM4OTc5MGQzIiwiaWF0IjoxNzAxNTI1NDg4fQ.FXzR69ut_IfUJeM_iWcQf1rfvj19brga169o7lDc-q8
 
-{
-    "title": "facebook12",
-    "author": "cow",
-    "url": "www.faceboo12.com",
-    "userId": "656b181061ebe166389790d3"
-}
+# {
+#     "title": "facebook12",
+#     "author": "cow",
+#     "url": "www.faceboo12.com"
+# }
 
 
 # DELETE http://localhost:3003/api/blogs/656b4148b908a09dc3eaab7a
@@ -21,10 +20,11 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvd
 #     "userId": "656b181061ebe166389790d3"
 # }
 
-# POST http://localhost:3003/api/login
-# Content-Type: application/json
 
-# {
-#     "username": "cow",
-#     "password": "123"
-# }
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username": "cow",
+    "password": "123"
+}
