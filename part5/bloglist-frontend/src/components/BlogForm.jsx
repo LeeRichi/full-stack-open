@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import blogService from '../services/blogs'
-import '../index.css'
 import Togglable from './Togglable';
 
 const BlogForm = ({ setBlogs, setErrorMessage }) => {

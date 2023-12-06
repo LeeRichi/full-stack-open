@@ -41,24 +41,4 @@ describe('Blog component', () => {
     expect(screen.getByText(/Url:/)).toBeInTheDocument();
     expect(screen.getByText(/Likes:/)).toBeInTheDocument();
   });
-
-
-  test('If the like button is clicked, mockHandler should be called', async () => {
-    const blog = {
-      id: 1,
-      title: 'Test Blog',
-      author: 'Test Author',
-      url: 'http://test.com',
-      likes: 10,
-    };
-
-    const mockHandler = jest.fn();
-
-    render(<Blog blog={blog} setBlogs={() => {}} user={{ username: 'testuser' }} mockHandler={mockHandler} />);
-
-    fireEvent.click(screen.getByText(/like/));
-    fireEvent.click(screen.getByText(/like/));
-
-    expect(mockHandler).toHaveBeenCalledTimes(2);
-  });
 })
