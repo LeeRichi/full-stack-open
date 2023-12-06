@@ -2,7 +2,7 @@ import Togglable from "./Togglable"
 import blogService from "../services/blogs"
 import { useState, useEffect } from "react"
 
-const Blog = ({ blog, setBlogs, user }) =>
+const Blog = ({ blog, setBlogs, user, mockHandler }) =>
 {
   const [latestBlog, setLatestBlog] = useState(blog);
 
@@ -17,15 +17,15 @@ const Blog = ({ blog, setBlogs, user }) =>
   const onLikePlusOne = async() =>
   {
     const updatedBlog = await blogService.update(blog.id, {
-        ...blog,
-        likes: blog.likes + 1
-      });
+      ...blog,
+      likes: blog.likes + 1
+    });
 
-      setLatestBlog(updatedBlog);
+    setLatestBlog(updatedBlog);
 
-      setBlogs((prevBlogs) =>
-        prevBlogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b))
-      );
+    setBlogs((prevBlogs) =>
+      prevBlogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b))
+    );  
   }
 
   const onBlogDelete = () =>
@@ -40,13 +40,18 @@ const Blog = ({ blog, setBlogs, user }) =>
   return (
     <div style={blogStyle}>
       <div>
-        Title: {blog.title}
+        Title: {blog.title}<br />
+        Author: {blog.author}
+
         <Togglable buttonLabel="view" hideLabel="hide">
           Url: {blog.url}<br />
           Likes: {latestBlog.likes}
-          <button onClick={onLikePlusOne}>like</button>
+          {/* <button onClick={onLikePlusOne} className="btnTest">like</button>           */}
+          <button onClick={() => {
+            onLikePlusOne();
+            mockHandler();
+          }}>like</button>
           <br />
-          Author: {blog.author}
           {blog.user?.username === user.username ? <button onClick={onBlogDelete}>delete</button> : null}
         </Togglable>
       </div>      
