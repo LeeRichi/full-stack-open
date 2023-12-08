@@ -2,7 +2,7 @@ import Togglable from "./Togglable"
 import blogService from "../services/blogs"
 import { useState, useEffect } from "react"
 
-const Blog = ({ blog, setBlogs, user, mockHandler }) =>
+const Blog = ({ blog, setBlogs, user }) =>
 {
   const [latestBlog, setLatestBlog] = useState(blog);
 
@@ -30,7 +30,10 @@ const Blog = ({ blog, setBlogs, user, mockHandler }) =>
 
   const onBlogDelete = () =>
   {
-    blogService.remove(blog.id)
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.user?.username}`))
+    {
+      blogService.remove(blog.id)
+    }
   }
 
   useEffect(() => {
@@ -49,10 +52,9 @@ const Blog = ({ blog, setBlogs, user, mockHandler }) =>
           {/* <button onClick={onLikePlusOne} className="btnTest">like</button>           */}
           <button onClick={() => {
             onLikePlusOne();
-            mockHandler();
           }}>like</button>
           <br />
-          {blog.user?.username === user.username ? <button onClick={onBlogDelete}>delete</button> : null}
+          {blog.user?.username === user.id ? <button onClick={onBlogDelete}>delete</button> : null}
         </Togglable>
       </div>      
     </div>
