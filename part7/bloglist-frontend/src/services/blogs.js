@@ -46,6 +46,17 @@ const deleteOne = async(id) =>
   return response.data
 }
 
+const addComment = async (id, comment) =>
+{
+  try
+  {
+    const response = await axios.post(`${baseUrl}/${id}/comments`, { content: comment });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default { 
-  getAll, getOne, createNew, updateOne, setToken, deleteOne
+  getAll, getOne, createNew, updateOne, setToken, deleteOne, addComment
 }

@@ -3,11 +3,15 @@ import blogService from "../services/blogs"
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { addLikes, deleteBlog } from "../reducers/blogReducer"
+import { Link } from "react-router-dom"
+import { Box, Link as ChakraLink, Button, Heading } from '@chakra-ui/react';
+import BlogForm from "./BlogForm"
 
-const Blog = ({ blog, }) =>
+
+
+const Blog = ({errorMessage, setErrorMessage}) =>
 {
-  const user = useSelector((state) => state.user)
-  const [latestBlog, setLatestBlog] = useState(blog);
+  const blogs = useSelector(state => state.blog);
   const dispatch = useDispatch();
 
   const blogStyle = {
@@ -15,7 +19,8 @@ const Blog = ({ blog, }) =>
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
-    marginBottom: 5
+    marginBottom: 5,
+    margin: '10px'
   }
 
   const onLikePlusOne = async() =>
@@ -30,27 +35,26 @@ const Blog = ({ blog, }) =>
       dispatch(deleteBlog(blog.id))
     }
   }
-
-  useEffect(() => {
-    setLatestBlog(blog);
-  }, [blog]);
-
+  
   return (
-    <div style={blogStyle}>
-      <div>
-        Title: {blog.title}<br />
-        Author: {blog.author}
-        <Togglable buttonLabel="view" hideLabel="hide">
-          Url: {blog.url}<br />
-          Likes: {blog.likes}
-          <button onClick={() => {
-            onLikePlusOne();
-          }}>like</button>
-          <br />
-          {blog.user?.id === user.id ? <button onClick={onBlogDelete}>delete</button> : null}
-        </Togglable>
-      </div>      
-    </div>
+    <>
+      <Heading as="h2" size="xl">
+        blogs
+      </Heading>
+      {errorMessage && (
+        <Box color="red.500" p={4} bg="red.100" borderRadius="md">
+          {errorMessage.message}
+        </Box>
+      )}
+      <BlogForm setErrorMessage={setErrorMessage} />
+      <Box p={10} marginBottom={5}>           
+        {blogs.map((blog) =>
+          <ChakraLink as={Link} to={`/blogs/${blog.id}`} borderWidth={1} width="200px" fontWeight="bold" fontSize="lg" mb={2} display="block">
+            {blog.title}
+          </ChakraLink>
+        )}
+      </Box>
+    </>
   )
 }
 

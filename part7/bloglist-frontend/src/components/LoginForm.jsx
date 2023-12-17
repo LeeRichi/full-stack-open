@@ -1,73 +1,66 @@
-import { useState } from "react"
-import loginService from '../services/login'
-import blogService from '../services/blogs'
-import '../index.css'
-import { userLogin } from "../reducers/userReducer"
+import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from "../reducers/userReducer";
+import { Box, Button, Heading, Input, VStack } from '@chakra-ui/react';
 
-import { useSelector, useDispatch } from 'react-redux';
-
-const LoginForm = ({ errorMessage, setErrorMessage }) =>
-{
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+const LoginForm = ({ errorMessage, setErrorMessage }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  console.log(user)
 
-  const handleLogin = async (event) =>
-  { 
-    event.preventDefault()    
-    try
-    {
-      dispatch(userLogin(username, password))    
-      setUsername('')
-      setPassword('')
-    } catch (exception)
-    {
-      console.log(exception)
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      dispatch(userLogin(username, password));
+      setUsername('');
+      setPassword('');
+    } catch (exception) {
+      console.log(exception);
       setErrorMessage({
-        message: 'wrong username or password',
+        message: 'Wrong username or password',
         type: 'error'
-      })
-      setTimeout(() =>
-      {
-        setErrorMessage(null)
-      }, 5000)
+      });
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleLogin}>
-      <h1>login to application</h1>
+    <VStack spacing={4} align="center" justify="center">
+      <Heading as="h1" size="lg">
+        Login to Application
+      </Heading>
       {errorMessage && (
-        <div className={`message ${errorMessage.type}`}>
+        <Box color="red.500" p={4} bg="red.100" borderRadius="md">
           {errorMessage.message}
-        </div>
+        </Box>
       )}
-      <div>
-        username
-        <input
-          id='username'
+      <Box>
+        <label htmlFor="username">Username</label>
+        <Input
+          id="username"
           type="text"
           value={username}
-          name="Username"
           onChange={({ target }) => setUsername(target.value)}
         />
-      </div>
-      <div>
-        password
-        <input
-          id='password'
+      </Box>
+      <Box>
+        <label htmlFor="password">Password</label>
+        <Input
+          id="password"
           type="password"
           value={password}
-          name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
-      </div>
-      <button type="submit" id="login-button">login</button>
-    </form>
-  )
-}
-  
-export default LoginForm
+      </Box>
+      <Button type="submit" colorScheme="teal" onClick={handleLogin}>
+        Login
+      </Button>
+    </VStack>
+  );
+};
+
+export default LoginForm;
