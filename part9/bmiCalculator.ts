@@ -18,7 +18,6 @@ const calculateBmi = (height: number, weight: number): string => {
 const a: number = Number(process.argv[2])
 const b: number = Number(process.argv[3])
 
-
 const result = calculateBmi(a, b)
 console.log(result)
 

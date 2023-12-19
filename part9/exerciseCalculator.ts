@@ -8,7 +8,8 @@ interface MultiplyValues {
   average: number
 }
 
-const mockData = [3, 0, 2, 4.5, 0, 3, 1]
+const args: string[] = process.argv.slice(2);
+const mockData: number[] = args.map(arg => parseFloat(arg));
 
 const calculateExercises = (arr: number[], target: number): MultiplyValues =>
 {
