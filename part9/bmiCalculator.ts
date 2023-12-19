@@ -1,4 +1,11 @@
-const calculateBmi = (height: number, weight: number): string => {
+interface BmiResult {
+  weight: number;
+  height: number;
+  bmi: string;
+}
+
+const calculateBmi = (height: number, weight: number): BmiResult =>
+{
   const bmi = weight / Math.pow(height / 100, 2);
   let message = '';
 
@@ -12,13 +19,11 @@ const calculateBmi = (height: number, weight: number): string => {
     message = 'Obese';
   }
 
-  return message;
+   return {
+    weight,
+    height,
+    bmi: `${bmi} - ${message}`,
+  };
 };
-
-const a: number = Number(process.argv[2])
-const b: number = Number(process.argv[3])
-
-const result = calculateBmi(a, b)
-console.log(result)
 
 export default calculateBmi;

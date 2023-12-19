@@ -8,13 +8,13 @@ interface MultiplyValues {
   average: number
 }
 
-const args: string[] = process.argv.slice(2);
-const mockData: number[] = args.map(arg => parseFloat(arg));
+// const args: string[] = process.argv.slice(2);
+// const mockData: number[] = args.map(arg => parseFloat(arg));
 
 const calculateExercises = (arr: number[], target: number): MultiplyValues =>
 {
-    const restDays = mockData.filter(data => data === 0).length;
-    const averageHours = mockData.reduce((sum, value) => sum + value, 0) / mockData.length;
+    const restDays = arr.filter(data => data === 0).length;
+    const averageHours = arr.reduce((sum, value) => sum + value, 0) / arr.length;
     const meetTarget = target < averageHours ? true : false;
     const rating = (averageHours > target) ? 3 : (averageHours === target) ? 2 : 1;
 
@@ -32,5 +32,7 @@ const calculateExercises = (arr: number[], target: number): MultiplyValues =>
     })
 }
 
-const result = calculateExercises(mockData, 2)
-console.log(result)
+// const result = calculateExercises(mockData, 2)
+// console.log(result)
+
+export default calculateExercises;
