@@ -21,10 +21,9 @@
 # }
 
 
-POST http://localhost:3003/api/login
+POST http://localhost:3003/api/blogs/656760a62fe70b10b87749eb/comments
 Content-Type: application/json
 
 {
-    "username": "cow",
-    "password": "123"
+    "content": "comment test"
 }

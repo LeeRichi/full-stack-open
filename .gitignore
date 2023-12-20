@@ -4,3 +4,7 @@ part3b/*
 PhonebookFrontend/*
 notesBackend-mongo/*
 test/*
+notes-redux/*
+unicafe-redux/*
+redux-anecdotes/*
+part6_notes/*
