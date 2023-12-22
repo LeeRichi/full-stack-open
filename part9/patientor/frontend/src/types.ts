@@ -1,4 +1,7 @@
-export interface Diagnosis {
+import {Entry} from './EntryTypes'
+
+export interface Diagnosis
+{
   code: string;
   name: string;
   latin?: string;
@@ -10,6 +13,11 @@ export enum Gender {
   Other = "other"
 }
 
+// export interface Entry
+// {
+  
+// }
+
 export interface Patient {
   id: string;
   name: string;
@@ -17,6 +25,7 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
+  entries: Entry[]
 }
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
