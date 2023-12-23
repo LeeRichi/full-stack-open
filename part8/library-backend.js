@@ -145,7 +145,6 @@ const resolvers = {
             }
 
             // return books;
-
             return filteredBooks.map(book => ({
                 title: book.title,
                 author: book.author,
@@ -174,50 +173,45 @@ const resolvers = {
     },
     Mutation: {
         addBook(parent, args) {
-            const { title, author, published, genres } = args;
+          const { title, author, published, genres } = args;
 
-            // Check if the book with the same title already exists
-            if (books.find((b) => b.title === title)) {
+          if (books.find((b) => b.title === title)) {
             throw new GraphQLError('Name must be unique', {
                 extensions: {
                 code: 'BAD_USER_INPUT',
                 invalidArgs: title,
                 },
             });
-            }
+          }
 
-            // Check if the author already exists
-            let matchedAuthor = authors.find((a) => a.name === author);
+          let matchedAuthor = authors.find((a) => a.name === author);
 
-            // If the author doesn't exist, add them to the authors array
-            if (!matchedAuthor) {
+          if (!matchedAuthor) {
             matchedAuthor = {
                 name: author,
                 id: uuid(),
-                born: null, // You might want to set a default value or prompt for this
+                born: null, 
             };
             authors.push(matchedAuthor);
-            }
+          }
 
-            // Add the new book
-            const newBook = {
+          const newBook = {
             title,
             author,
             published,
             genres,
             id: uuid(),
-            };
-            books.push(newBook);
+          };
+          books.push(newBook);
 
-            // Return the new book
-            return newBook;
+          return newBook;
         },
         editAuthor(parent, args) {
-            const matchedAuthor = authors.find((a) => a.name === args.name);
+          const matchedAuthor = authors.find((a) => a.name === args.name);
 
-            let originalName;
+          let originalName;
 
-            if (matchedAuthor) {
+          if (matchedAuthor) {
             originalName = matchedAuthor.name;
 
             matchedAuthor.name = args.name;
@@ -226,15 +220,13 @@ const resolvers = {
             console.log(`Author ${originalName} updated to ${matchedAuthor.name}`);
 
             return matchedAuthor;
-            } else {
-                console.error('Author not found');
-                return null;
-            }
+          } else {
+            console.error('Author not found');
+            return null;
+          }
         }
     }
 }
-
-
 
 const server = new ApolloServer({
   typeDefs,
