@@ -19,5 +19,3 @@ app.use('/api/diaries', diaryRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-//fake
