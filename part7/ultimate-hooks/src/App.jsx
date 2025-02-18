@@ -17,28 +17,19 @@ const useField = (type) => {
 
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([])
-  
+
   useEffect(() => {
-    const fetchResources = async () => {
-      try {
-        const response = await axios.get(baseUrl);
-        setResources(response.data);
-      } catch (error) {
-        console.error('Error fetching resources:', error);
-      }
-    };
+    const getAll = async() => {
+			const res = await axios.get(baseUrl)
+			setResources(res.data);
+		};
+		getAll()
+  }, [baseUrl])
 
-    fetchResources();
-  }, [baseUrl]);
-
-  const create = async(resource) => {
-    try
-    {
-      const response = await axios.post(baseUrl, resource)
-      return setResources(resources.concat(response.data))
-    } catch(error) {
-      console.error('Error fetching country data:', error);
-    }
+	const create = async(resource) =>
+	{
+		const res = await axios.post(baseUrl, resource)
+		return setResources(resources.concat(res.data))
   }
 
   const service = {
@@ -62,7 +53,7 @@ const App = () => {
     event.preventDefault()
     noteService.create({ content: content.value })
   }
- 
+
   const handlePersonSubmit = (event) => {
     event.preventDefault()
     personService.create({ name: name.value, number: number.value})
@@ -75,7 +66,7 @@ const App = () => {
         <input {...content} />
         <button>create</button>
       </form>
-      {notes?.map(n => <p key={n.id}>{n.content}</p>)}
+      {notes.map(n => <p key={n.id}>{n.content}</p>)}
 
       <h2>persons</h2>
       <form onSubmit={handlePersonSubmit}>

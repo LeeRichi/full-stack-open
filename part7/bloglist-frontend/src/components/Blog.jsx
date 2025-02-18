@@ -1,61 +1,80 @@
-import Togglable from "./Togglable"
-import blogService from "../services/blogs"
-import { useState, useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
-import { addLikes, deleteBlog } from "../reducers/blogReducer"
-import { Link } from "react-router-dom"
-import { Box, Link as ChakraLink, Button, Heading } from '@chakra-ui/react';
-import BlogForm from "./BlogForm"
+// import Togglable from "./Toggleable"
+// import blogService from '../services/blogs'
+// import { Link } from "react-router-dom"
 
+// const Blog = ({ blog, user, addLikes, onDeleteBlog }) =>
+// {
+// 	const blogStyle = {
+// 		paddingTop: 10,
+// 		paddingLeft: 2,
+// 		border: 'solid',
+// 		borderWidth: 1,
+// 		marginBottom: 5
+// 	}
+// 	return (
+// 		<div style={blogStyle} id="blog" className="blog">
+// 			<Link to={`/blogs/${blog.id}`}>
+// 				{blog.title}
+// 			</Link>
+// 			<Togglable buttonLabel='view'>
+// 				{blog.url}
+// 				<br/>
+//         <p data-testid="blog-likes">
+// 					{blog.likes}
+// 					<button id="like" onClick={() => addLikes(blog.id)}>like</button>
+// 				</p>
+// 				{ user && blog.user.length !== 0 && blog.user[0].username === user.username ?
+// 					<button id="delete" onClick={() => onDeleteBlog(blog.id)}>delete</button>
+// 					:
+// 					null
+// 				}
+// 			</Togglable>
+// 			{blog.author}
+// 		</div>
+// 	)
+// }
 
+// export default Blog
 
-const Blog = ({errorMessage, setErrorMessage}) =>
-{
-  const blogs = useSelector(state => state.blog);
-  const dispatch = useDispatch();
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, Typography, Button, Box } from '@mui/material';
+import Togglable from "./Toggleable";
+import blogService from '../services/blogs';
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-    margin: '10px'
-  }
-
-  const onLikePlusOne = async() =>
-  {
-    dispatch(addLikes(blog))
-  }
-
-  const onBlogDelete = () =>
-  {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.user?.username}`))
-    {
-      dispatch(deleteBlog(blog.id))
-    }
-  }
-  
+const Blog = ({ blog, user, addLikes, onDeleteBlog }) => {
   return (
-    <>
-      <Heading as="h2" size="xl">
-        blogs
-      </Heading>
-      {errorMessage && (
-        <Box color="red.500" p={4} bg="red.100" borderRadius="md">
-          {errorMessage.message}
-        </Box>
-      )}
-      <BlogForm setErrorMessage={setErrorMessage} />
-      <Box p={10} marginBottom={5}>           
-        {blogs.map((blog) =>
-          <ChakraLink as={Link} to={`/blogs/${blog.id}`} borderWidth={1} width="200px" fontWeight="bold" fontSize="lg" mb={2} display="block">
+    <Card sx={{ marginBottom: 2 }}>
+      <CardContent>
+        <Typography variant="h5" component="div">
+          <Link to={`/blogs/${blog.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             {blog.title}
-          </ChakraLink>
-        )}
-      </Box>
-    </>
-  )
+          </Link>
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {blog.author}
+        </Typography>
+        <Togglable buttonLabel='view'>
+          <Typography variant="body1" gutterBottom>
+            {blog.url}
+          </Typography>
+          <Box display="flex" alignItems="center">
+            <Typography variant="body2" data-testid="blog-likes">
+              Likes: {blog.likes}
+            </Typography>
+            <Button variant="contained" color="primary" size="small" onClick={() => addLikes(blog.id)} sx={{ marginLeft: 1 }}>
+              Like
+            </Button>
+          </Box>
+          { user && blog.user.length !== 0 && blog.user[0].username === user.username &&
+            <Button variant="contained" color="secondary" size="small" onClick={() => onDeleteBlog(blog.id)} sx={{ marginTop: 1 }}>
+              Delete
+            </Button>
+          }
+        </Togglable>
+      </CardContent>
+    </Card>
+  );
 }
 
-export default Blog
+export default Blog;

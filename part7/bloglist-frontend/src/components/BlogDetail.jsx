@@ -1,54 +1,131 @@
-import React from 'react';
+// import React, { useState } from 'react'
+// import { useParams } from 'react-router-dom'
+// import { getOneBlog, postComment } from '../request'
+// import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+// import { v4 as uuidv4 } from 'uuid';
+
+// const BlogDetail = () =>
+// {
+// 	const [comment, setComment] = useState('')
+// 	const { id } = useParams()
+// 	const queryClient = useQueryClient();
+
+// 	const { data: blog, isLoading, error } = useQuery({
+// 		queryKey: ['blog', id],
+// 		queryFn: () => getOneBlog(id),
+// 	});
+
+// 	const postCommentMutation = useMutation({
+// 		mutationFn: (newComment) => postComment(id, newComment),
+// 		onSuccess: () => {
+// 			queryClient.invalidateQueries(['blog', id]);
+// 		},
+// 		onError: (error) => {
+// 			// Handle error
+// 			console.error('Error posting comment:', error);
+// 		},
+// 	});
+
+
+// 	const handleComments = async (e) => {
+// 		e.preventDefault();
+// 		postCommentMutation.mutate({comment});
+// 		setComment('');
+// 	};
+
+// 	if (isLoading) {
+// 		return <div>Loading...</div>;
+//   }
+
+//   if (error) {
+// 		return <div>Error fetching blog details</div>;
+// 	}
+
+// 	return (
+// 		<>
+// 			<div>{blog.title}</div>
+// 			<div>{blog.url}</div>
+// 			<div>{blog.likes}</div>
+// 			<div>{blog.user.length !== 0 && blog.user[0]}</div>
+// 			<form onSubmit={handleComments}>
+// 				<input type="text" name="comment" value={comment} onChange={(e) => setComment(e.target.value)}/>
+// 				<button type='sumbit'>add comment</button>
+// 			</form>
+// 			<div>{blog.comments.map(comment => <li key={uuidv4()}>{comment}</li>)}</div>
+// 		</>
+// 	)
+// }
+
+// export default BlogDetail
+
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { addLikes } from '../reducers/blogReducer';
-import CommentForm from './CommentForm';
-import { Box, Heading, Link, Text, Button } from '@chakra-ui/react';
+import { getOneBlog, postComment } from '../request';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { TextField, Button, Typography, List, ListItem, ListItemText, Paper, Box } from '@mui/material';
 
 const BlogDetail = () => {
+  const [comment, setComment] = useState('');
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
-  const blogs = useSelector((state) => state.blog);
-  const matchedBlog = blogs.find((blog) => blog.id == id);
-  const blogComments = matchedBlog.comments?.map((comment) => comment.content);
+  const { data: blog, isLoading, error } = useQuery({
+    queryKey: ['blog', id],
+    queryFn: () => getOneBlog(id),
+  });
 
-  if (!matchedBlog) {
-    return <div>Blog not found</div>;
-  }
+  const postCommentMutation = useMutation({
+    mutationFn: (newComment) => postComment(id, newComment),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['blog', id]);
+    },
+    onError: (error) => {
+      console.error('Error posting comment:', error);
+    },
+  });
 
-  const handleLike = () => {
-    dispatch(addLikes(matchedBlog));
+  const handleComments = async (e) => {
+    e.preventDefault();
+    postCommentMutation.mutate({ content: comment });
+    setComment('');
   };
 
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography>Error fetching blog details</Typography>;
+  }
+
   return (
-    <Box>
-      {matchedBlog.url && (
-        <Link href={matchedBlog.url} target="_blank" rel="noopener noreferrer">
-          {matchedBlog.url}
-        </Link>
-      )}
-      <Heading as="h2" size="xl">
-        {matchedBlog.title}
-      </Heading>
-      <Text>
-        Likes: {matchedBlog.likes}
-        <Button ml={2} onClick={handleLike}>
-          Like
-        </Button>
-      </Text>
-      <Text>Added by: {matchedBlog.author}</Text>
-      <Heading as="h3" size="lg">
-        Comments
-      </Heading>
-      <CommentForm />
-      <ul>
-        {blogComments.map((comment, index) => (
-          <li key={index}>{comment}</li>
+    <Paper elevation={3} sx={{ padding: 2, marginTop: 2 }}>
+      <Typography variant="h4">{blog.title}</Typography>
+      <Typography variant="body1" gutterBottom>{blog.url}</Typography>
+      <Typography variant="body2" color="textSecondary">Likes: {blog.likes}</Typography>
+      <Typography variant="body2" color="textSecondary">{blog.user.length !== 0 && blog.user[0].username}</Typography>
+
+      <Box component="form" onSubmit={handleComments} sx={{ marginTop: 2 }}>
+        <TextField
+          label="Add Comment"
+          variant="outlined"
+          fullWidth
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>Add Comment</Button>
+      </Box>
+
+      <List sx={{ marginTop: 2 }}>
+        {blog.comments.map((comment, index) => (
+          <ListItem key={index}>
+            <ListItemText primary={comment.content} />
+          </ListItem>
         ))}
-      </ul>
-    </Box>
+      </List>
+    </Paper>
   );
 };
 
 export default BlogDetail;
+

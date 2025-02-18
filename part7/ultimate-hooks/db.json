@@ -9,20 +9,8 @@
       "content": "best feature ever <3"
     },
     {
-      "content": "test",
+      "content": "new note",
       "id": 3
-    },
-    {
-      "content": "test2",
-      "id": 4
-    },
-    {
-      "content": "test3",
-      "id": 5
-    },
-    {
-      "content": "test4",
-      "id": 6
     }
   ],
   "persons": [
@@ -37,8 +25,8 @@
       "number": "012-123123"
     },
     {
-      "name": "test",
-      "number": "123456",
+      "name": "new name",
+      "number": "and number",
       "id": 3
     }
   ]

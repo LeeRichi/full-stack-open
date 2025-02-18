@@ -1,82 +1,51 @@
-import { useState } from 'react';
-import { Input, Button, FormControl, FormLabel, VStack } from '@chakra-ui/react';
-import Togglable from './Togglable';
-import { useDispatch } from 'react-redux';
-import { createBlog } from '../reducers/blogReducer';
+import React, {useState} from 'react'
 
-const BlogForm = ({ setErrorMessage }) => {
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+const BlogForm = ({ addBlog }) =>
+{
+	const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
-  const dispatch = useDispatch();
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value)
+  }
 
-  const handleCreate = (e) => {
-    e.preventDefault();
-    const newBlog = { title, author, url };
-    blogService
-      .createNew(newBlog)
-      .then((returnedBlog) => {
-        dispatch(createBlog(returnedBlog));
-        setTitle('');
-        setAuthor('');
-        setUrl('');
-        setErrorMessage({
-          message: `New blog ${title} by ${author} added`,
-          type: 'success',
-        });
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
-      })
-      .catch((err) => {
-        setErrorMessage({ message: err, type: 'error' });
-        console.error('Error creating: ', err);
-      });
-  };
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value)
+  }
 
-  return (
-    <Togglable buttonLabel="new blog" hideLabel="cancel">
-      <VStack spacing={4} align="stretch">
-        <FormControl>
-          <FormLabel>Title:</FormLabel>
-          <Input
-            type="text"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-            id="title-input"
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Author:</FormLabel>
-          <Input
-            type="text"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-            id="author-input"
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>URL:</FormLabel>
-          <Input
-            type="text"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-            id="url-input"
-          />
-        </FormControl>
-        <Button
-          type="submit"
-          id="create-btn"
-          onClick={handleCreate}
-          size="md"
-          width="100%"
-        >
-          Create
-        </Button>
-      </VStack>
-    </Togglable>
-  );
-};
+  const handleUrlChange = (event) => {
+    setUrl(event.target.value)
+  }
 
-export default BlogForm;
+  const createBlog = (event) => {
+    event.preventDefault()
+    addBlog({
+      title: title,
+      author: author,
+      url: url,
+    })
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+	return (
+		<>
+			<form role="form" onSubmit={createBlog} style={{ display: 'flex', flexDirection: 'column', maxWidth: '200px' }}>
+				<h1>create new</h1>
+				<label htmlFor="title">Title</label>
+				<input id="title" data-testid="title" type="text" name="title" value={title} onChange={handleTitleChange} />
+
+				<label htmlFor="author">Author</label>
+				<input id="author" data-testid="author" type="text" name="author" value={author} onChange={handleAuthorChange} />
+
+				<label htmlFor="url">URL</label>
+				<input id="url" data-testid="url" type="text" name="url" value={url} onChange={handleUrlChange} />
+
+				<button id="create-button" type="submit" style={{marginTop: '10px'}}>create</button>
+			</form>
+		</>
+	)
+}
+
+export default BlogForm

@@ -1,18 +1,18 @@
-import ReactDOM from 'react-dom/client'
-import { Provider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'; // Import BrowserRouter
-import App from './App'
-import store from './store'
-import { ChakraProvider } from '@chakra-ui/react';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { NotificationProvider } from './context/NotificationContext';
+import { UserProvider } from './context/UserContext';
 
-console.log(store.getState())
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
-    <Router>
-      <ChakraProvider>
+  <QueryClientProvider client={queryClient}>
+    <NotificationProvider>
+      <UserProvider>
         <App />
-      </ChakraProvider>
-    </Router>
-  </Provider>
-)
+      </UserProvider>
+    </NotificationProvider>
+  </QueryClientProvider>
+);
